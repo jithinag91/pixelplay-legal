@@ -41,7 +41,49 @@
     nav.top .links a { color: var(--text-muted); }
     nav.top .links a:hover { color: var(--text-main); }
 
-    .hero { text-align: center; padding: 72px 0 64px; }
+    .hero-wrap { position: relative; overflow: hidden; min-height: 88vh; display: flex; flex-direction: column; }
+    .hero-wrap > .container { position: relative; z-index: 2; width: 100%; flex: 1; display: flex; flex-direction: column; }
+    .hero-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        radial-gradient(ellipse at center, rgba(9, 10, 15, 0.35) 0%, rgba(9, 10, 15, 0.55) 70%),
+        linear-gradient(180deg, rgba(9, 10, 15, 0.5) 0%, rgba(9, 10, 15, 0) 30%, rgba(9, 10, 15, 0) 70%, var(--bg) 100%);
+    }
+    .hero { text-align: center; padding: 72px 0 64px; margin: auto 0; }
+    .hero h1, .hero .lead { text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6); }
+    .hero .lead { color: #c9cfdd; }
+    .sound-toggle {
+      position: absolute; right: 20px; bottom: 28px; z-index: 3;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px 8px 11px; border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: #c9cfdd; font: 600 0.8rem 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.2px;
+      cursor: pointer; opacity: 0.75;
+      transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    .sound-toggle:hover, .sound-toggle:focus-visible { opacity: 1; background: rgba(255, 255, 255, 0.14); outline: none; }
+    .sound-toggle:focus-visible { box-shadow: 0 0 0 2px rgba(165, 180, 252, 0.7); }
+    .sound-toggle svg { width: 16px; height: 16px; }
+    .sound-toggle .ico-on { display: none; }
+    .sound-toggle[aria-pressed="true"] { opacity: 1; color: #fff; border-color: rgba(168, 85, 247, 0.55); background: rgba(99, 102, 241, 0.22); }
+    .sound-toggle[aria-pressed="true"] .ico-on { display: block; }
+    .sound-toggle[aria-pressed="true"] .ico-off { display: none; }
+    @media (max-width: 560px) {
+      .hero-wrap { min-height: 0; }
+      .hero { padding: 40px 0 88px; }
+      .hero-video { object-position: center 40%; }
+      .sound-toggle { right: 16px; bottom: 20px; padding: 9px; }
+      .sound-toggle .label { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-video, .sound-toggle { display: none; }
+      .hero-wrap { background: url(assets/hero-poster.jpg) center / cover no-repeat; }
+    }
     .badge {
       display: inline-block; padding: 6px 14px;
       background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3);
@@ -105,6 +147,16 @@
   </style>
 </head>
 <body>
+  <div class="hero-wrap">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/hero-poster.jpg" aria-hidden="true">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Turn sound on">
+      <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>
+      <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <span class="label">Sound off</span>
+    </button>
   <div class="container">
     <nav class="top">
       <a href="index.html" class="brand">PixelPlay <span>AI</span></a>
@@ -123,6 +175,10 @@
       <a class="cta" href="https://play.google.com/store/apps/details?id=com.pixelplayai.app">Get it on Google Play</a>
       <span class="cta-note">Free to download &middot; Android</span>
     </header>
+  </div>
+  </div>
+
+  <div class="container">
 
     <section id="features">
       <h2>What you can make</h2>
@@ -179,5 +235,21 @@
       &copy; 2026 PixelPlay AI. All rights reserved.
     </footer>
   </div>
+  <script>
+    (function () {
+      var video = document.querySelector('.hero-video');
+      var btn = document.querySelector('.sound-toggle');
+      if (!video || !btn) return;
+      var label = btn.querySelector('.label');
+      btn.addEventListener('click', function () {
+        var on = video.muted;
+        video.muted = !on;
+        if (on) { video.play().catch(function () {}); }
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.setAttribute('aria-label', on ? 'Turn sound off' : 'Turn sound on');
+        label.textContent = on ? 'Sound on' : 'Sound off';
+      });
+    })();
+  </script>
 </body>
 </html>
