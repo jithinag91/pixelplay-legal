@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PixelPlay AI - Turn your ideas into AI videos</title>
   <meta name="description" content="PixelPlay AI turns your text into short AI videos, fast. Available for Android.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -35,8 +37,9 @@
     .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
 
     nav.top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
-    .brand { font-weight: 800; font-size: 1.15rem; color: var(--text-main); letter-spacing: -0.01em; }
-    .brand span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; color: var(--text-main); letter-spacing: -0.01em; }
+    .brand img { width: 32px; height: 32px; border-radius: 8px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 14px rgba(99, 102, 241, 0.3); }
+    .brand .ai { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     nav.top .links { display: flex; gap: 18px; font-size: 0.9rem; }
     nav.top .links a { color: var(--text-muted); }
     nav.top .links a:hover { color: var(--text-main); }
@@ -159,7 +162,7 @@
     </button>
   <div class="container">
     <nav class="top">
-      <a href="index.html" class="brand">PixelPlay <span>AI</span></a>
+      <a href="index.html" class="brand"><img src="assets/logo.png" alt="" width="32" height="32"><span class="name">PixelPlay <span class="ai">AI</span></span></a>
       <div class="links">
         <a href="#features">Features</a>
         <a href="privacy.html">Privacy</a>
