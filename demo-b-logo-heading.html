@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PixelPlay AI - Turn your ideas into AI videos</title>
+  <meta name="description" content="PixelPlay AI turns your text into short AI videos, fast. Available for Android.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: rgba(22, 25, 38, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f1f3f9;
+      --text-muted: #9ba3b8;
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.10) 0%, transparent 40%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    a { color: #a5b4fc; text-decoration: none; }
+    a:hover { color: #c7d2fe; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+    nav.top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; color: var(--text-main); letter-spacing: -0.01em; }
+    .brand img { width: 32px; height: 32px; border-radius: 8px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 4px 14px rgba(99, 102, 241, 0.3); }
+    .brand .ai { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    nav.top .links { display: flex; gap: 18px; font-size: 0.9rem; }
+    nav.top .links a { color: var(--text-muted); }
+    nav.top .links a:hover { color: var(--text-main); }
+
+    .hero-wrap { position: relative; overflow: hidden; min-height: 88vh; display: flex; flex-direction: column; }
+    .hero-wrap > .container { position: relative; z-index: 2; width: 100%; flex: 1; display: flex; flex-direction: column; }
+    .hero-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        radial-gradient(ellipse at center, rgba(9, 10, 15, 0.35) 0%, rgba(9, 10, 15, 0.55) 70%),
+        linear-gradient(180deg, rgba(9, 10, 15, 0.5) 0%, rgba(9, 10, 15, 0) 30%, rgba(9, 10, 15, 0) 70%, var(--bg) 100%);
+    }
+    .hero { text-align: center; padding: 72px 0 64px; margin: auto 0; }
+    .hero h1, .hero .lead { text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6); }
+    .hero .lead { color: #c9cfdd; }
+    .sound-toggle {
+      position: absolute; right: 20px; bottom: 28px; z-index: 3;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px 8px 11px; border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: #c9cfdd; font: 600 0.8rem 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.2px;
+      cursor: pointer; opacity: 0.75;
+      transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    .sound-toggle:hover, .sound-toggle:focus-visible { opacity: 1; background: rgba(255, 255, 255, 0.14); outline: none; }
+    .sound-toggle:focus-visible { box-shadow: 0 0 0 2px rgba(165, 180, 252, 0.7); }
+    .sound-toggle svg { width: 16px; height: 16px; }
+    .sound-toggle .ico-on { display: none; }
+    .sound-toggle[aria-pressed="true"] { opacity: 1; color: #fff; border-color: rgba(168, 85, 247, 0.55); background: rgba(99, 102, 241, 0.22); }
+    .sound-toggle[aria-pressed="true"] .ico-on { display: block; }
+    .sound-toggle[aria-pressed="true"] .ico-off { display: none; }
+    @media (max-width: 560px) {
+      .hero-wrap { min-height: 0; }
+      .hero { padding: 40px 0 88px; }
+      .hero-video { object-position: center 40%; }
+      .sound-toggle { right: 16px; bottom: 20px; padding: 9px; }
+      .sound-toggle .label { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-video, .sound-toggle { display: none; }
+      .hero-wrap { background: url(assets/hero-poster.jpg) center / cover no-repeat; }
+    }
+    .badge {
+      display: inline-block; padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 9999px; font-size: 13px; font-weight: 600; color: #818cf8;
+      margin-bottom: 20px; letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 800; line-height: 1.12;
+      letter-spacing: -0.03em; margin-bottom: 18px; color: #fff;
+    }
+    h1 .grad { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .lead { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 32px; }
+    .cta {
+      display: inline-block; padding: 14px 28px; border-radius: 12px;
+      background: var(--accent-gradient); color: #fff; font-weight: 700;
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.35); transition: transform 0.15s ease;
+    }
+    .cta:hover { color: #fff; transform: translateY(-2px); }
+    .cta-note { display: block; margin-top: 12px; font-size: 0.85rem; color: var(--text-muted); }
+
+    section { padding: 40px 0; }
+    h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; text-align: center; margin-bottom: 28px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 24px; }
+    .card .icon {
+      width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center;
+      background: rgba(99, 102, 241, 0.15); font-size: 1.2rem; margin-bottom: 14px;
+    }
+    .card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .card p { color: var(--text-muted); font-size: 0.95rem; }
+    .card.soon { opacity: 0.6; }
+    .tag {
+      display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 9999px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; vertical-align: middle;
+    }
+    .tag.live { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .tag.soon { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--card-border); }
+    .steps { counter-reset: step; }
+    .steps .card h3::before {
+      counter-increment: step; content: counter(step);
+      display: inline-grid; place-items: center; width: 26px; height: 26px; margin-right: 10px;
+      border-radius: 50%; background: var(--accent-gradient); color: #fff; font-size: 0.8rem;
+    }
+
+    .contact { text-align: center; }
+    .contact p { color: var(--text-muted); margin-bottom: 8px; }
+    .contact a { font-weight: 600; font-size: 1.05rem; word-break: break-all; }
+
+    footer {
+      border-top: 1px solid var(--card-border); margin-top: 40px; padding: 28px 0 40px;
+      text-align: center; color: var(--text-muted); font-size: 0.875rem;
+    }
+    footer .links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 10px; }
+    footer .links a { color: var(--text-muted); }
+    footer .links a:hover { color: var(--text-main); }
+
+    @media (max-width: 560px) {
+      nav.top .links { display: none; }
+      .hero { padding: 48px 0 40px; }
+    }
+    /* DEMO B: solid logo replaces the badge, lighter "AI videos" gradient, soft dark backing behind the text */
+    .hero { position: relative; isolation: isolate; }
+    .hero::before {
+      content: ""; position: absolute; left: 50%; top: 50%; z-index: -1; pointer-events: none;
+      width: min(820px, 100%); height: 80%; transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, rgba(9, 10, 15, 0.6) 0%, rgba(9, 10, 15, 0) 70%);
+    }
+    .hero-logo {
+      display: block; width: 76px; height: 76px; margin: 0 auto 18px;
+      filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.45)) drop-shadow(0 0 22px rgba(168, 85, 247, 0.45));
+    }
+    h1 .grad {
+      background: linear-gradient(135deg, #e0e7ff 0%, #c4b5fd 45%, #f0abfc 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.65));
+    }
+    @media (max-width: 560px) { .hero-logo { width: 64px; height: 64px; margin-bottom: 14px; } }
+    .brand img { border-radius: 0; box-shadow: none; filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.45)); }
+  </style>
+</head>
+<body>
+  <div class="hero-wrap">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/hero-poster.jpg" aria-hidden="true">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Turn sound on">
+      <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>
+      <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <span class="label">Sound off</span>
+    </button>
+  <div class="container">
+    <nav class="top">
+      <a href="index.html" class="brand"><img src="assets/logo-mark.png" alt="" width="32" height="32"><span class="name">PixelPlay <span class="ai">AI</span></span></a>
+      <div class="links">
+        <a href="#features">Features</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <img class="hero-logo" src="assets/logo-mark.png" alt="PixelPlay AI logo" width="76" height="76">
+      <h1>Turn your ideas into<br><span class="grad">AI videos</span></h1>
+      <p class="lead">Describe what you want to see and PixelPlay AI turns your words into a short video, fast. No editing skills needed.</p>
+      <a class="cta" href="https://play.google.com/store/apps/details?id=com.pixelplayai.app">Get it on Google Play</a>
+      <span class="cta-note">Free to download &middot; Android</span>
+    </header>
+  </div>
+  </div>
+
+  <div class="container">
+
+    <section id="features">
+      <h2>What you can make</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="icon">&#9654;&#65039;</div>
+          <h3>Text to video <span class="tag live">Available</span></h3>
+          <p>Describe a scene in your own words and get a short AI-generated video clip.</p>
+        </div>
+        <div class="card">
+          <div class="icon">&#9889;</div>
+          <h3>Very fast generation <span class="tag live">Available</span></h3>
+          <p>Your video is ready in moments, so you can try idea after idea.</p>
+        </div>
+        <div class="card soon">
+          <div class="icon">&#128100;</div>
+          <h3>Reusable characters <span class="tag soon">Coming soon</span></h3>
+          <p>Create a character once and keep them looking the same in every video.</p>
+        </div>
+        <div class="card soon">
+          <div class="icon">&#128247;</div>
+          <h3>Your own photos <span class="tag soon">Coming soon</span></h3>
+          <p>Upload photos of people, objects and places to use in your scenes.</p>
+        </div>
+        <div class="card soon">
+          <div class="icon">&#127916;</div>
+          <h3>Stories and series <span class="tag soon">Coming soon</span></h3>
+          <p>Plan multi-scene stories and series that play out like short episodes.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>How it works</h2>
+      <div class="grid steps">
+        <div class="card"><h3>Sign in</h3><p>Create a free account in the app.</p></div>
+        <div class="card"><h3>Create</h3><p>Type a prompt describing the video you want.</p></div>
+        <div class="card"><h3>Watch and save</h3><p>Your video is ready fast and saved in your library to watch and download.</p></div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <h2>Contact</h2>
+      <p>Questions, feedback or support? Email us:</p>
+      <a href="mailto:jithinag91reg@gmail.com">jithinag91reg@gmail.com</a>
+    </section>
+
+    <footer>
+      <div class="links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; EULA</a>
+        <a href="delete-account.html">Delete Account</a>
+      </div>
+      &copy; 2026 PixelPlay AI. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    (function () {
+      var video = document.querySelector('.hero-video');
+      var btn = document.querySelector('.sound-toggle');
+      if (!video || !btn) return;
+      var label = btn.querySelector('.label');
+      btn.addEventListener('click', function () {
+        var on = video.muted;
+        video.muted = !on;
+        if (on) { video.play().catch(function () {}); }
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.setAttribute('aria-label', on ? 'Turn sound off' : 'Turn sound on');
+        label.textContent = on ? 'Sound on' : 'Sound off';
+      });
+    })();
+  </script>
+</body>
+</html>
