@@ -48,6 +48,14 @@
       text-align: center;
       margin-bottom: 36px;
     }
+    nav.top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 0 32px 0;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 32px;
+    }
     .brand {
       display: inline-flex;
       align-items: center;
@@ -57,7 +65,6 @@
       color: var(--text-main);
       letter-spacing: -0.01em;
       text-decoration: none;
-      margin-bottom: 24px;
       transition: opacity 0.2s;
     }
     .brand:hover {
@@ -75,33 +82,54 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .back-home {
+    nav.top .links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.9rem;
+    }
+    nav.top .links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    nav.top .links a:hover {
+      color: var(--text-main);
+    }
+    nav.top .links a.active {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    nav.top .back-home-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      font-weight: 500;
-      text-decoration: none;
-      margin-bottom: 20px;
+      color: #a5b4fc;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
       padding: 6px 12px;
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
+      font-weight: 600;
+      font-size: 0.85rem;
       transition: all 0.2s ease;
     }
-    .back-home:hover {
+    nav.top .back-home-pill:hover {
+      background: rgba(99, 102, 241, 0.25);
       color: #ffffff;
-      background: rgba(255, 255, 255, 0.07);
-      border-color: rgba(99, 102, 241, 0.4);
+      border-color: rgba(99, 102, 241, 0.45);
     }
-    .back-home svg {
-      width: 14px;
-      height: 14px;
+    nav.top .back-home-pill svg {
+      width: 13px;
+      height: 13px;
       transition: transform 0.2s ease;
     }
-    .back-home:hover svg {
-      transform: translateX(-3px);
+    nav.top .back-home-pill:hover svg {
+      transform: translateX(-2px);
+    }
+    @media (max-width: 640px) {
+      nav.top .links a:not(.back-home-pill) {
+        display: none;
+      }
     }
     .badge {
       display: inline-block;
@@ -293,21 +321,26 @@
 </head>
 <body>
   <div class="container">
-    <header>
-      <div>
-        <a href="index.html" class="brand">
-          <img src="assets/logo.png" alt="PixelPlay Logo" width="32" height="32">
-          <span>PixelPlay <span class="ai">AI</span></span>
-        </a>
-      </div>
-      <div>
-        <a href="index.html" class="back-home">
+    <nav class="top">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="PixelPlay Logo" width="32" height="32">
+        <span class="name">PixelPlay <span class="ai">AI</span></span>
+      </a>
+      <div class="links">
+        <a href="index.html#features">Features</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html" class="active">Terms</a>
+        <a href="index.html#contact">Contact</a>
+        <a href="index.html" class="back-home-pill">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
-          Back to Main
+          Main Page
         </a>
       </div>
+    </nav>
+
+    <header>
       <div class="badge">Legal &amp; Compliance</div>
       <h1>Terms of Service & EULA</h1>
       <div class="meta">
