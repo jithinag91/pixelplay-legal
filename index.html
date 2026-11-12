@@ -97,7 +97,38 @@
       font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 800; line-height: 1.12;
       letter-spacing: -0.03em; margin-bottom: 18px; color: #fff;
     }
-    h1 .grad { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    h1 .grad {
+      display: inline-block;
+      background: linear-gradient(
+        110deg,
+        #6366f1 0%,
+        #8b5cf6 20%,
+        #a855f7 35%,
+        #e0e7ff 48%,
+        #ffffff 50%,
+        #e0e7ff 52%,
+        #a855f7 65%,
+        #8b5cf6 80%,
+        #6366f1 100%
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textShimmer 16s linear infinite;
+      filter: drop-shadow(0 2px 20px rgba(168, 85, 247, 0.25));
+    }
+    @keyframes textShimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      h1 .grad {
+        animation: none;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
     .lead { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 32px; }
     .cta {
       display: inline-block; padding: 14px 28px; border-radius: 12px;
